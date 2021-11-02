@@ -1,5 +1,5 @@
 # SimpleCommands
-![Maven](https://github.com/MartenM/SimpleCommands/actions/workflows/maven.yml/badge.svg) ![TagShield](https://img.shields.io/github/v/tag/MartenM/simplecommands?sort=date)
+![Maven](https://github.com/MartenM/SimpleCommands/actions/workflows/maven.yml/badge.svg) [![](https://jitpack.io/v/MartenM/SimpleCommands.svg)](https://jitpack.io/#MartenM/SimpleCommands)
 
 Provides an simple, easy to work with command framework for minecraft spigot servers.
 
