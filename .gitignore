@@ -1,0 +1,8 @@
+# Remove .idea
+.idea/
+
+# Remove target
+target/
+
+# Remove .iml files
+*.iml
