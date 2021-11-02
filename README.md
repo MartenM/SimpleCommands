@@ -24,7 +24,7 @@ In order to use SimpleCommands you need to import the project using Maven or sim
 <dependency>
     <groupId>com.github.MartenM</groupId>
     <artifactId>SimpleCommands</artifactId>
-    <version>-SNAPSHOT</version>
+    <version>1.0.0</version>
 </dependency>
 
 ```
