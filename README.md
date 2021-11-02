@@ -1,4 +1,6 @@
 # SimpleCommands
+![Maven](https://github.com/MartenM/SimpleCommands/actions/workflows/maven.yml/badge.svg)
+
 Provides an simple, easy to work with command framework for minecraft spigot servers.
 
 ### What this frameworks offers:
