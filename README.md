@@ -13,7 +13,21 @@ Provides an simple, easy to work with command framework for minecraft spigot ser
 
 ## Start using SimpleCommands
 In order to use SimpleCommands you need to import the project using Maven or simply copy the files into your project.
-Maven is recommend though. There is no central Maven repo yet so you will have to install the project locally for now.
+```xml
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+
+<dependency>
+    <groupId>com.github.MartenM</groupId>
+    <artifactId>SimpleCommands</artifactId>
+    <version>-SNAPSHOT</version>
+</dependency>
+
+```
 
 ### Step 1: Create a base class
 ```java
