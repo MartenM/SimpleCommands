@@ -16,7 +16,7 @@ public class SimpleHelpFormatter {
 
     public void sendHelp(CommandSender sender, SimpleCommand command) {
         List<SimpleCommand> available = command.getSubCommands(sender, "");
-        send(sender, String.format("&7===============[ %s &7]===============&", pluginName));
+        send(sender, String.format("&7===============[ %s &7]===============", pluginName));
         send(sender, " ");
 
         for(SimpleCommand cmd : available) {
