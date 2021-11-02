@@ -1,5 +1,5 @@
 # SimpleCommands
-![Maven](https://github.com/MartenM/SimpleCommands/actions/workflows/maven.yml/badge.svg)
+![Maven](https://github.com/MartenM/SimpleCommands/actions/workflows/maven.yml/badge.svg) ![TagShield](https://img.shields.io/github/v/tag/MartenM/simplecommands?sort=date)
 
 Provides an simple, easy to work with command framework for minecraft spigot servers.
 
@@ -13,6 +13,8 @@ Provides an simple, easy to work with command framework for minecraft spigot ser
 
 ## Start using SimpleCommands
 In order to use SimpleCommands you need to import the project using Maven or simply copy the files into your project.
+The latest release tag can be seen in the shield above.
+
 ```xml
 <repositories>
     <repository>
@@ -24,7 +26,7 @@ In order to use SimpleCommands you need to import the project using Maven or sim
 <dependency>
     <groupId>com.github.MartenM</groupId>
     <artifactId>SimpleCommands</artifactId>
-    <version>1.0.0</version>
+    <version>tag</version>
 </dependency>
 
 ```
