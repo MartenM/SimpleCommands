@@ -26,7 +26,7 @@ The latest release tag can be seen in the shield above.
 <dependency>
     <groupId>com.github.MartenM</groupId>
     <artifactId>SimpleCommands</artifactId>
-    <version>tag</version>
+    <version>[FROM JitPack badge]</version>
 </dependency>
 
 ```
