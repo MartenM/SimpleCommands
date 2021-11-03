@@ -5,7 +5,7 @@ import nl.martenm.simplecommands.SimpleCommand;
 public class SimpleTestCommand extends SimpleCommand {
 
     public SimpleTestCommand() {
-        super("test", false);
+        super("test",  false);
 
         addCommand(new SubCommandPlayerOnly());
         addCommand(new SubCommandPermissionTest());

@@ -78,7 +78,7 @@ public class SimpleCommandTest {
 
         assert attached.getFullPermission().equalsIgnoreCase("permission.attached");
 
-        root.onCommand(playerSender, null, "permission attached", new String[] {"attached"});
+        root.onCommand(playerSender, null, "permission attachedPermission", new String[] {"attachedPermission"});
         assert !playerSender.isExecuted();
         assert playerSender.hasReceived(SimpleCommandMessages.NO_PERMISSION.m());
     }

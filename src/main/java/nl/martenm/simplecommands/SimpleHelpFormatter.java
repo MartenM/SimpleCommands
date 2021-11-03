@@ -14,13 +14,12 @@ public class SimpleHelpFormatter {
 
     }
 
-    public void sendHelp(CommandSender sender, SimpleCommand command) {
-        List<SimpleCommand> available = command.getSubCommands(sender, "");
+    public void sendHelp(CommandSender sender, List<SimpleCommand> subCommands) {
         send(sender, String.format("&7===============[ %s &7]===============", pluginName));
         send(sender, " ");
 
-        for(SimpleCommand cmd : available) {
-            send(sender, String.format("&1/&a%s &7- &e%s", cmd.getFullName(), cmd.getDescription()));
+        for(SimpleCommand cmd : subCommands) {
+            send(sender, String.format("&2/&a%s &7- &e%s", cmd.getFullName(), cmd.getDescription()));
         }
 
         send(sender, " ");

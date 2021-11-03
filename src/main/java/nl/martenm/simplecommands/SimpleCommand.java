@@ -49,10 +49,10 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
-        // For roots
-        if(this.permission != null && !sender.hasPermission(this.permission)) {
-            sender.sendMessage(SimpleCommandMessages.NO_PERMISSION.m());
-            return false;
+        // If there are no subcommands the onCommand method should have been overwritten.
+        // Throw an exception if this is not the case.
+        if(subCommands.size() == 0) {
+            throw new RuntimeException("No sub-commands for the command: " + getFullName());
         }
 
         // Respect the PlayerOnly command.
@@ -61,14 +61,19 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        // Check if arguments are provided. If not we give a list of possible arguments.
-        // If there are no arguments we have reached a dead end (at least for this sender).
+        // If no arguments are provided check if there are any possible sub-commands.
+        // Send a help about these. If the available subCommands.size() == 0 that means the sender cannot execute any due to missing
+        // permissions or them being playerOnly commands.
         if(args.length == 0) {
             List<SimpleCommand> subCommands = getSubCommands(sender, "");
-            if(subCommands.size() == 0) sender.sendMessage(SimpleCommandMessages.UNKNOWN_COMMAND.m());
-            else {
-                sendHelp(sender);
+
+            // Check if the subCommands are possible
+            if(subCommands.size() == 0) {
+                sender.sendMessage(SimpleCommandMessages.NO_PERMISSION.m());
+                return true;
             }
+
+            sendHelp(sender, subCommands);
             return true;
         }
 
@@ -89,8 +94,8 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        // For arguments
-        if(sc.permission != null && !sender.hasPermission(sc.permission)) {
+        // If a node contains sub-commands we don't check it's permission.
+        if(sc.subCommands.size() == 0 && sc.getFullPermission() != null && !sender.hasPermission(sc.getFullPermission())) {
             sender.sendMessage(SimpleCommandMessages.NO_PERMISSION.m());
             return true;
         }
@@ -155,18 +160,26 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
     }
 
     /**
-     * Returns true if this command has commands that can be exectued by the player
+     * Returns true if this command has commands that can be executed by the player.
+     * If a node has no permission that means that will return true.
+     *
      * @param sender
      * @return
      */
     boolean depthPermissionSearch(CommandSender sender) {
-        if(!sender.hasPermission(getFullPermission())) return false;
-        if(subCommands.size() == 0) return true;
+        // TODO: Strict node. If the node has a permission and this is enabled players NEED to have the permission of the current command. No exceptions.
+        //if(getFullPermission() != null && !sender.hasPermission(getFullPermission())) return false;
+
+        if(subCommands.size() == 0) {
+            String permission = getFullPermission();
+            if(permission == null) return true;
+            return sender.hasPermission(permission);
+        }
         return subCommands.values().stream().anyMatch(cmd -> cmd.depthPermissionSearch(sender));
     }
 
-    protected void sendHelp(CommandSender sender) {
-        this.helpFormatter.sendHelp(sender, this);
+    protected void sendHelp(CommandSender sender, List<SimpleCommand> subCommands) {
+        this.helpFormatter.sendHelp(sender, subCommands);
     }
 
     /**
@@ -223,7 +236,11 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
         if(fullPermission != null) return fullPermission;
 
         // If it does not start with the + operator we return this root permission.
-        if(this.permission == null) return null;
+        // For cases were an argument has no permission (null) we get the permission of it's parent.
+        if(this.permission == null) {
+            if(parent == null) return null;
+            return parent.getFullPermission();
+        }
         if(!this.permission.startsWith("+")) return getPermission();
 
         // Check if we have a parent. If not, thrown an exception

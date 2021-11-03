@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class TestCommandSender {
 
@@ -25,6 +26,7 @@ public class TestCommandSender {
 
     protected boolean handlePermissionCheck(String permission) {
         log("PERMISSION", permission);
+        Objects.requireNonNull(permission);
         return this.permissions.contains(permission);
     }
 
