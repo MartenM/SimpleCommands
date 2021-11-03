@@ -190,8 +190,11 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
         return this.name;
     }
 
+    public boolean hasDescription() {
+        return this.description != null;
+    }
+
     public String getDescription() {
-        if(description == null) return "";
         return description;
     }
 

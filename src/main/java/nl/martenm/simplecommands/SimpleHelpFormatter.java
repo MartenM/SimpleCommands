@@ -14,12 +14,22 @@ public class SimpleHelpFormatter {
 
     }
 
+    /**
+     * Sends the help to the player.
+     * @param sender The sender that should receive the help page.
+     * @param subCommands The commands that are available for this sender.
+     */
     public void sendHelp(CommandSender sender, List<SimpleCommand> subCommands) {
         send(sender, String.format("&7===============[ %s &7]===============", pluginName));
         send(sender, " ");
 
         for(SimpleCommand cmd : subCommands) {
-            send(sender, String.format("&2/&a%s &7- &e%s", cmd.getFullName(), cmd.getDescription()));
+            if(cmd.hasDescription()) {
+                send(sender, String.format("&2/&a%s &7- &e%s", cmd.getFullName(), cmd.getDescription()));
+            } else {
+                send(sender, String.format("&2/&a%s%s", cmd.getFullName()));
+            }
+
         }
 
         send(sender, " ");
