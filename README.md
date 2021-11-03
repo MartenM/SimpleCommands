@@ -1,7 +1,7 @@
 # SimpleCommands
 ![Maven](https://github.com/MartenM/SimpleCommands/actions/workflows/maven.yml/badge.svg) [![](https://jitpack.io/v/MartenM/SimpleCommands.svg)](https://jitpack.io/#MartenM/SimpleCommands)
 
-Provides an simple, easy to work with command framework for minecraft spigot servers.
+Provides a simple, easy to work with command framework for minecraft spigot servers.
 
 ### What this frameworks offers:
 * Full developer control, just implement the onCommand() method just like you normally would!
