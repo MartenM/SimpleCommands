@@ -7,6 +7,7 @@ Provides an simple, easy to work with command framework for minecraft spigot ser
 * Full developer control, just implement the onCommand() method just like you normally would!
 * Simple nesting of commands
 * Simple permission handling
+* Stack permission nodes
 * Tab completion for subcommands
 * Automatic (customizable) help generator that respects permissions!
 
