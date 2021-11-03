@@ -1,4 +1,6 @@
 # SimpleCommands
+![Maven](https://github.com/MartenM/SimpleCommands/actions/workflows/maven.yml/badge.svg) [![](https://jitpack.io/v/MartenM/SimpleCommands.svg)](https://jitpack.io/#MartenM/SimpleCommands)
+
 Provides an simple, easy to work with command framework for minecraft spigot servers.
 
 ### What this frameworks offers:
@@ -11,7 +13,23 @@ Provides an simple, easy to work with command framework for minecraft spigot ser
 
 ## Start using SimpleCommands
 In order to use SimpleCommands you need to import the project using Maven or simply copy the files into your project.
-Maven is recommend though. There is no central Maven repo yet so you will have to install the project locally for now.
+The latest release tag can be seen in the shield above.
+
+```xml
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+
+<dependency>
+    <groupId>com.github.MartenM</groupId>
+    <artifactId>SimpleCommands</artifactId>
+    <version>tag</version>
+</dependency>
+
+```
 
 ### Step 1: Create a base class
 ```java
