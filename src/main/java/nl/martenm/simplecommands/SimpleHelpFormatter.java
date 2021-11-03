@@ -27,7 +27,7 @@ public class SimpleHelpFormatter {
             if(cmd.hasDescription()) {
                 send(sender, String.format("&2/&a%s &7- &e%s", cmd.getFullName(), cmd.getDescription()));
             } else {
-                send(sender, String.format("&2/&a%s%s", cmd.getFullName()));
+                send(sender, String.format("&2/&a%s", cmd.getFullName()));
             }
 
         }

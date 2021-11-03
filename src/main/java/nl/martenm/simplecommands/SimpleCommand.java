@@ -20,7 +20,7 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
     private String fullPermission = null;
 
     // Help formatter
-    private SimpleHelpFormatter helpFormatter = new SimpleHelpFormatter();
+    private SimpleHelpFormatter helpFormatter = null;
 
     // Keep track of the parent in case we need to attach commands.
     private SimpleCommand parent;
@@ -178,8 +178,16 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
         return subCommands.values().stream().anyMatch(cmd -> cmd.depthPermissionSearch(sender));
     }
 
+    protected SimpleHelpFormatter getHelpFormatter() {
+        if(this.helpFormatter != null) return helpFormatter;
+        if(this.parent != null) return parent.getHelpFormatter();
+
+        this.helpFormatter = new SimpleHelpFormatter();
+        return this.helpFormatter;
+    }
+
     protected void sendHelp(CommandSender sender, List<SimpleCommand> subCommands) {
-        this.helpFormatter.sendHelp(sender, subCommands);
+        getHelpFormatter().sendHelp(sender, subCommands);
     }
 
     /**
