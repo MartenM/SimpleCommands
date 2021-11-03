@@ -186,6 +186,15 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
         return this.helpFormatter;
     }
 
+    /**
+     * Sets the formatter for this command.
+     * Please note that each root command can have it's own look and feel help.
+     * @param formatter The new formatter
+     */
+    protected void setHelpFormatter(SimpleHelpFormatter formatter) {
+        this.helpFormatter = formatter;
+    }
+
     protected void sendHelp(CommandSender sender, List<SimpleCommand> subCommands) {
         getHelpFormatter().sendHelp(sender, subCommands);
     }
