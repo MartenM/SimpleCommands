@@ -1,13 +1,10 @@
 package nl.martenm.simplecommands;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
 
@@ -20,11 +17,11 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
     private String fullPermission = null;
 
     // Help formatter
-    private SimpleHelpFormatter helpFormatter = new SimpleHelpFormatter();
+    private ISimpleHelpFormatter helpFormatter = null;
 
     // Keep track of the parent in case we need to attach commands.
     private SimpleCommand parent;
-    private Map<String, SimpleCommand> subCommands = new HashMap<>();
+    private final Map<String, SimpleCommand> subCommands = new HashMap<>();
 
     public SimpleCommand(String name, boolean playerOnly) {
         this.name = name;
@@ -163,8 +160,8 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
      * Returns true if this command has commands that can be executed by the player.
      * If a node has no permission that means that will return true.
      *
-     * @param sender
-     * @return
+     * @param sender The command sender
+     * @return True if this node can be executed.
      */
     boolean depthPermissionSearch(CommandSender sender) {
         // TODO: Strict node. If the node has a permission and this is enabled players NEED to have the permission of the current command. No exceptions.
@@ -178,20 +175,40 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
         return subCommands.values().stream().anyMatch(cmd -> cmd.depthPermissionSearch(sender));
     }
 
+    protected ISimpleHelpFormatter getHelpFormatter() {
+        if(this.helpFormatter != null) return helpFormatter;
+        if(this.parent != null) return parent.getHelpFormatter();
+
+        this.helpFormatter = new SimpleHelpFormatter();
+        return this.helpFormatter;
+    }
+
+    /**
+     * Sets the formatter for this command.
+     * Please note that each root command can have it's own look and feel help.
+     * @param formatter The new formatter
+     */
+    protected void setHelpFormatter(SimpleHelpFormatter formatter) {
+        this.helpFormatter = formatter;
+    }
+
     protected void sendHelp(CommandSender sender, List<SimpleCommand> subCommands) {
-        this.helpFormatter.sendHelp(sender, subCommands);
+        getHelpFormatter().sendHelp(sender, subCommands);
     }
 
     /**
      * Returns the command name.
-     * @return
+     * @return The command name
      */
     public String getName() {
         return this.name;
     }
 
+    public boolean hasDescription() {
+        return this.description != null;
+    }
+
     public String getDescription() {
-        if(description == null) return "";
         return description;
     }
 
@@ -230,7 +247,7 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
      * Used to create the full permission node for a command.
      * Commands can have their own specific permission but in order to make nesting
      * easier the + operator can be used to concat to the permission of the parent node.
-     * @return
+     * @return A command node like "commands.debug.test.xxx"
      */
     public String getFullPermission() {
         if(fullPermission != null) return fullPermission;
@@ -255,5 +272,18 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
 
         this.fullPermission = parentPermission + "." + this.permission.substring(1);
         return this.fullPermission;
+    }
+
+    /**
+     * Register the plugin to the server using the plugin specified.
+     * @param plugin The plugin the command should be registered too.
+     */
+    public void registerCommand(JavaPlugin plugin) {
+        PluginCommand command = plugin.getCommand(this.name);
+        if(command == null) throw new RuntimeException(String.format("Plugin tried to register the SimpleCommand /%s but it was not specified in the plugin.yml", name));
+        if(parent != null) throw new RuntimeException(String.format("Plugin tried to register the SimpleCommand /%s but has a parent node!", getFullName()));
+
+        command.setExecutor(this);
+        command.setTabCompleter(this);
     }
 }
