@@ -1,10 +1,8 @@
 package nl.martenm.simplecommands;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -275,5 +273,17 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
 
         this.fullPermission = parentPermission + "." + this.permission.substring(1);
         return this.fullPermission;
+    }
+
+    /**
+     * Register the plugin to the server using the plugin specified.
+     * @param plugin The plugin the command should be registered too.
+     */
+    public void registerCommand(JavaPlugin plugin) {
+        PluginCommand command = plugin.getCommand(this.name);
+        if(command == null) throw new RuntimeException(String.format("Plugin tried to register the SimpleCommand /%s but it was not specified in the plugin.yml"));
+
+        command.setExecutor(this);
+        command.setTabCompleter(this);
     }
 }
