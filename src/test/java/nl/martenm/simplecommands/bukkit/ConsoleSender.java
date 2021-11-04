@@ -12,6 +12,7 @@ import org.bukkit.plugin.Plugin;
 import java.util.Set;
 import java.util.UUID;
 
+@SuppressWarnings("ConstantConditions")
 public class ConsoleSender extends TestCommandSender implements ConsoleCommandSender {
     public ConsoleSender(String senderName) {
         super(senderName);

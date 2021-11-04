@@ -2,11 +2,9 @@ package nl.martenm.simplecommands;
 
 import nl.martenm.simplecommands.bukkit.ConsoleSender;
 import nl.martenm.simplecommands.bukkit.PlayerSender;
-import nl.martenm.simplecommands.bukkit.TestCommandSender;
 import nl.martenm.simplecommands.implementations.SimpleTestCommand;
 import nl.martenm.simplecommands.implementations.SubAlways;
 import nl.martenm.simplecommands.implementations.SubAttached;
-import nl.martenm.simplecommands.implementations.SubCommandPermissionTest;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.junit.jupiter.api.Assertions;

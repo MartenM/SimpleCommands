@@ -1,7 +1,6 @@
 package nl.martenm.simplecommands.implementations;
 
 import nl.martenm.simplecommands.SimpleCommand;
-import nl.martenm.simplecommands.SimpleHelpFormatter;
 
 public class SimpleTestCommand extends SimpleCommand {
 

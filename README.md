@@ -1,9 +1,9 @@
 # SimpleCommands
 ![Maven](https://github.com/MartenM/SimpleCommands/actions/workflows/maven.yml/badge.svg) [![](https://jitpack.io/v/MartenM/SimpleCommands.svg)](https://jitpack.io/#MartenM/SimpleCommands)
 
-Provides an simple, easy to work with command framework for minecraft spigot servers.
+Provides a simple, easy to work with command framework for minecraft spigot servers.
 
-### What this frameworks offers:
+### What this framework offers:
 * Full developer control, just implement the onCommand() method just like you normally would!
 * Simple nesting of commands
 * Simple permission handling
@@ -22,13 +22,15 @@ The latest release tag can be seen in the shield above.
         <url>https://jitpack.io</url>
     </repository>
 </repositories>
-
-<dependency>
-    <groupId>com.github.MartenM</groupId>
-    <artifactId>SimpleCommands</artifactId>
-    <version>[FROM JitPack badge]</version>
-</dependency>
-
+```
+```xml
+<dependencies>
+    <dependency>
+        <groupId>com.github.MartenM</groupId>
+        <artifactId>SimpleCommands</artifactId>
+        <version>[FROM JitPack badge]</version>
+    </dependency>
+</dependencies>
 ```
 
 ### Step 1: Create a base class
@@ -66,17 +68,19 @@ public class SimpleLoadPlayer extends SimpleCommand {
 
 ### Step 3: Register the command to the Server
 This step is basically the same as if you had no command framework in place!
-```java
-SimpleCommand    = new DebugCommand();
-PluginCommand pc = getCommand(name);
-if(pc == null) {
-    getLogger().warning("Failed to load the command: " + name);
-    return;
-}
 
-pc.setExecutor(command);
-pc.setTabCompleter(command);
+```java
+@Override
+public class TestPlugin extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        
+        SimpleCommand testCommand = new SimpleCommand() {};
+        testCommand.registerCommand(this);
+        
+    }
+}
 ```
 
-### Step 4: Enjoy the command ingame
+### Step 4: Enjoy the command in game
 You are done! 

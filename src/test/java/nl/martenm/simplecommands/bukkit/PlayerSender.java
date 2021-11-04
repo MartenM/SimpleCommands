@@ -63,6 +63,7 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public Server getServer() {
+        //noinspection ConstantConditions
         return null;
     }
 
@@ -88,6 +89,7 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public List<Entity> getPassengers() {
+        //noinspection ConstantConditions
         return null;
     }
 
@@ -133,6 +135,7 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public UUID getUniqueId() {
+        //noinspection ConstantConditions
         return null;
     }
 
@@ -153,6 +156,7 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public EntityType getType() {
+        //noinspection ConstantConditions
         return null;
     }
 
@@ -233,6 +237,7 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public Set<String> getScoreboardTags() {
+        //noinspection ConstantConditions
         return null;
     }
 
@@ -248,16 +253,19 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public PistonMoveReaction getPistonMoveReaction() {
+        //noinspection ConstantConditions
         return null;
     }
 
     @Override
     public BlockFace getFacing() {
+        //noinspection ConstantConditions
         return null;
     }
 
     @Override
     public Pose getPose() {
+        //noinspection ConstantConditions
         return null;
     }
 
@@ -268,21 +276,25 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public String getName() {
+        //noinspection ConstantConditions
         return null;
     }
 
     @Override
     public PlayerInventory getInventory() {
+        //noinspection ConstantConditions
         return null;
     }
 
     @Override
     public Inventory getEnderChest() {
+        //noinspection ConstantConditions
         return null;
     }
 
     @Override
     public MainHand getMainHand() {
+        //noinspection ConstantConditions
         return null;
     }
 
@@ -293,6 +305,7 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public InventoryView getOpenInventory() {
+        //noinspection ConstantConditions
         return null;
     }
 
@@ -333,6 +346,7 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public ItemStack getItemInHand() {
+        //noinspection ConstantConditions
         return null;
     }
 
@@ -343,6 +357,7 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public ItemStack getItemOnCursor() {
+        //noinspection ConstantConditions
         return null;
     }
 
@@ -383,11 +398,13 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public Location getBedLocation() {
+        //noinspection ConstantConditions
         return null;
     }
 
     @Override
     public GameMode getGameMode() {
+        //noinspection ConstantConditions
         return null;
     }
 
@@ -448,6 +465,7 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public Set<NamespacedKey> getDiscoveredRecipes() {
+        //noinspection ConstantConditions
         return null;
     }
 
@@ -573,6 +591,7 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public String getDisplayName() {
+        //noinspection ConstantConditions
         return null;
     }
 
@@ -583,6 +602,7 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public String getPlayerListName() {
+        //noinspection ConstantConditions
         return null;
     }
 
@@ -623,6 +643,7 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public Location getCompassTarget() {
+        //noinspection ConstantConditions
         return null;
     }
 
@@ -683,11 +704,13 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public Location getLocation() {
+        //noinspection ConstantConditions
         return null;
     }
 
     @Override
     public Location getLocation(Location location) {
+        //noinspection Contract
         return null;
     }
 
@@ -698,6 +721,7 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public Vector getVelocity() {
+        //noinspection ConstantConditions
         return null;
     }
 
@@ -713,6 +737,7 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public BoundingBox getBoundingBox() {
+        //noinspection ConstantConditions
         return null;
     }
 
@@ -728,6 +753,7 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public World getWorld() {
+        //noinspection ConstantConditions
         return null;
     }
 
@@ -758,6 +784,7 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public List<Entity> getNearbyEntities(double v, double v1, double v2) {
+        //noinspection ConstantConditions
         return null;
     }
 
@@ -1253,6 +1280,7 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public Scoreboard getScoreboard() {
+        //noinspection ConstantConditions
         return null;
     }
 
@@ -1368,6 +1396,7 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public AdvancementProgress getAdvancementProgress(Advancement advancement) {
+        //noinspection ConstantConditions
         return null;
     }
 
@@ -1383,6 +1412,7 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public String getLocale() {
+        //noinspection ConstantConditions
         return null;
     }
 
@@ -1398,6 +1428,7 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public Player.Spigot spigot() {
+        //noinspection ConstantConditions
         return null;
     }
 
@@ -1423,11 +1454,13 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public PermissionAttachment addAttachment(Plugin plugin, String s, boolean b) {
+        //noinspection ConstantConditions
         return null;
     }
 
     @Override
     public PermissionAttachment addAttachment(Plugin plugin) {
+        //noinspection ConstantConditions
         return null;
     }
 
@@ -1453,6 +1486,7 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public Set<PermissionAttachmentInfo> getEffectivePermissions() {
+        //noinspection ConstantConditions
         return null;
     }
 
@@ -1468,6 +1502,7 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public Map<String, Object> serialize() {
+        //noinspection ConstantConditions
         return null;
     }
 
@@ -1483,21 +1518,25 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public Location getEyeLocation() {
+        //noinspection ConstantConditions
         return null;
     }
 
     @Override
     public List<Block> getLineOfSight(Set<Material> set, int i) {
+        //noinspection ConstantConditions
         return null;
     }
 
     @Override
     public Block getTargetBlock(Set<Material> set, int i) {
+        //noinspection ConstantConditions
         return null;
     }
 
     @Override
     public List<Block> getLastTwoTargetBlocks(Set<Material> set, int i) {
+        //noinspection ConstantConditions
         return null;
     }
 
@@ -1628,6 +1667,7 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public Collection<PotionEffect> getActivePotionEffects() {
+        //noinspection ConstantConditions
         return null;
     }
 
@@ -1668,6 +1708,7 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public Entity getLeashHolder() throws IllegalStateException {
+        //noinspection ConstantConditions
         return null;
     }
 
@@ -1748,6 +1789,7 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public Set<UUID> getCollidableExemptions() {
+        //noinspection ConstantConditions
         return null;
     }
 
@@ -1763,6 +1805,7 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public EntityCategory getCategory() {
+        //noinspection ConstantConditions
         return null;
     }
 
@@ -1843,6 +1886,7 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public List<MetadataValue> getMetadata(String s) {
+        //noinspection ConstantConditions
         return null;
     }
 
@@ -1858,6 +1902,7 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public PersistentDataContainer getPersistentDataContainer() {
+        //noinspection ConstantConditions
         return null;
     }
 
@@ -1868,16 +1913,19 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
 
     @Override
     public Set<String> getListeningPluginChannels() {
+        //noinspection ConstantConditions
         return null;
     }
 
     @Override
     public <T extends Projectile> T launchProjectile(Class<? extends T> aClass) {
+        //noinspection ConstantConditions
         return null;
     }
 
     @Override
     public <T extends Projectile> T launchProjectile(Class<? extends T> aClass, Vector vector) {
+        //noinspection ConstantConditions
         return null;
     }
 }

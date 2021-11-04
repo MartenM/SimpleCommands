@@ -1,6 +1,5 @@
 package nl.martenm.simplecommands.bukkit;
 
-import nl.martenm.simplecommands.SimpleCommandMessages;
 import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
@@ -11,7 +10,6 @@ public class TestCommandSender {
 
     private String senderName;
 
-    private boolean executed = false;
     private List<String> messages = new ArrayList<>();
     private List<String> permissions = new ArrayList<>();
 
@@ -31,7 +29,7 @@ public class TestCommandSender {
     }
 
     private void log(String type, String message) {
-        System.out.println(String.format("[%s] %s: %s", senderName, type, ChatColor.stripColor(message)));
+        System.out.printf("[%s] %s: %s%n", senderName, type, ChatColor.stripColor(message));
     }
 
     public void addPermission(String permission) {
@@ -39,7 +37,6 @@ public class TestCommandSender {
     }
 
     public void reset() {
-        executed = false;
         messages.clear();
         permissions.clear();
     }
