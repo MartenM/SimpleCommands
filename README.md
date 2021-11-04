@@ -68,7 +68,8 @@ public class SimpleLoadPlayer extends SimpleCommand {
 ```
 
 ### Step 3: Register the command to the Server
-This step is basically the same as if you had no command framework in place!
+The SimpleCommands class provides an easy way to register commands.
+Simple follow the syntax below. Please note that commands with parents CANNOT be registered.
 
 ```java
 @Override
@@ -76,7 +77,7 @@ public class TestPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         
-        SimpleCommand testCommand = new SimpleCommand() {};
+        SimpleCommand testCommand = new SimpleTestCommand();
         testCommand.registerCommand(this);
         
     }
