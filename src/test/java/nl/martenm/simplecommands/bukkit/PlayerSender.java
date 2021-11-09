@@ -1049,6 +1049,11 @@ public class PlayerSender extends TestCommandSender implements CommandSender, Pl
     }
 
     @Override
+    public void stopAllSounds() {
+
+    }
+
+    @Override
     public void playEffect(Location location, Effect effect, int i) {
 
     }
