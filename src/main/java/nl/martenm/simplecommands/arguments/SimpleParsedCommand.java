@@ -1,6 +1,7 @@
 package nl.martenm.simplecommands.arguments;
 
 import nl.martenm.simplecommands.SimpleCommand;
+import nl.martenm.simplecommands.SimpleCommandMessages;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -36,7 +37,7 @@ public abstract class SimpleParsedCommand extends SimpleCommand {
         // Pre checks;
         if(arguments.size() > args.length) {
             String missing = arguments.stream().skip(args.length).map(SimpleCommandArgument::getName).collect(Collectors.joining(", "));
-            sender.sendMessage(String.format("Missing arguments: %s", missing));
+            sender.sendMessage(String.format(SimpleCommandMessages.MISSING_ARGUMENTS.m(), missing));
             return true;
         }
 

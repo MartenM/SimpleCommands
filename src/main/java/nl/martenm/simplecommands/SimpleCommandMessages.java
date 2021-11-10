@@ -6,6 +6,7 @@ import java.util.Locale;
 
 public enum SimpleCommandMessages {
 
+    MISSING_ARGUMENTS("&cMissing arguments:&7 %s"),
     DEFAULT_ARGUMENT_ERROR("&cThe argument &7%name%&c could not be parsed. Reason:&r %reason%&c. Value: &r%input%"),
     UNKNOWN_ARGUMENT("&cUnknown command argument:&7 %s"),
     PLAYER_ONLY("&cThis is a player only command."),
