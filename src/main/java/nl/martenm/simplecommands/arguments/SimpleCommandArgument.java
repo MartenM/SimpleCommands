@@ -61,7 +61,7 @@ public abstract class SimpleCommandArgument<T> {
      * @param ex The parse exception
      */
     public void sendError(CommandSender sender, String input, Exception ex) {
-        sender.sendMessage(getErrorMessage(input, ex));
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', getErrorMessage(input, ex)));
     }
 
     /**
