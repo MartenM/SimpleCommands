@@ -6,42 +6,23 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
 
-public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
+public abstract class SimpleCommand extends BaseCommand {
 
-    private final String name;
-    private final String description;
-    private final String permission;
-    private final boolean playerOnly;
 
-    // Cache the value of the full permission node.
-    private String fullPermission = null;
-
-    // Help formatter
-    private ISimpleHelpFormatter helpFormatter = null;
 
     // Keep track of the parent in case we need to attach commands.
-    private SimpleCommand parent;
-    private final Map<String, SimpleCommand> subCommands = new HashMap<>();
+    private final Map<String, BaseCommand> subCommands = new HashMap<>();
 
     public SimpleCommand(String name, boolean playerOnly) {
-        this.name = name;
-        this.playerOnly = playerOnly;
-        this.permission = null;
-        this.description = null;
+        super(name, playerOnly);
     }
 
     public SimpleCommand(String name, String permission, boolean playerOnly) {
-        this.name = name;
-        this.playerOnly = playerOnly;
-        this.permission = permission;
-        this.description = null;
+        super(name, permission, playerOnly);
     }
 
     public SimpleCommand(String name, String description, String permission, boolean playerOnly) {
-        this.name = name;
-        this.description = description;
-        this.permission = permission;
-        this.playerOnly = playerOnly;
+        super(name, description, permission, playerOnly);
     }
 
     @Override
@@ -53,7 +34,7 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
         }
 
         // Respect the PlayerOnly command.
-        if(playerOnly && !(sender instanceof Player)) {
+        if(!isAllowedSender(sender)) {
             sender.sendMessage(SimpleCommandMessages.PLAYER_ONLY.m());
             return true;
         }
@@ -62,7 +43,7 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
         // Send a help about these. If the available subCommands.size() == 0 that means the sender cannot execute any due to missing
         // permissions or them being playerOnly commands.
         if(args.length == 0) {
-            List<SimpleCommand> subCommands = getSubCommands(sender, "");
+            List<BaseCommand> subCommands = getSubCommands(sender, "");
 
             // Check if the subCommands are possible
             if(subCommands.size() == 0) {
@@ -74,7 +55,7 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        SimpleCommand sc = subCommands.get(args[0]);
+        BaseCommand sc = subCommands.get(args[0]);
         if(sc == null) {
             sender.sendMessage(String.format(SimpleCommandMessages.UNKNOWN_ARGUMENT.m(), args[0]));
             return true;
@@ -102,26 +83,14 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
     }
 
     /**
-     * Permission check for this node.
-     * Only executed when it's a leaf (in other worlds no subCommands).
+     * Adds the wildcard that nodes with subcommands should not be checked.
      * @param sender The command sender
      * @return True if allowed
      */
+    @Override
     public boolean checkPermission(CommandSender sender) {
         if(this.subCommands.size() != 0) return true;
-        if(this.getFullPermission() == null) return true;
-        return sender.hasPermission(this.getFullPermission());
-    }
-
-    /**
-     * Checks if the sender is allowed to execute this command.
-     * Mainly used for playerOnly checks.
-     * @param sender The command sender
-     * @return True if allowed.
-     */
-    public boolean isAllowedSender(CommandSender sender) {
-        if(this.playerOnly && !(sender instanceof Player)) return false;
-        else return true;
+        return super.checkPermission(sender);
     }
 
     @Override
@@ -137,7 +106,7 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
             return completions;
         }
 
-        SimpleCommand next = subCommands.get(args[0]);
+        BaseCommand next = subCommands.get(args[0]);
         if(next == null) return null;
 
         return next.onTabComplete(sender, command, s, Arrays.copyOfRange(args, 1, args.length));
@@ -147,13 +116,9 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
      * Command used to add sub-commands to a SimpleCommand.
      * @param command The command
      */
-    public void addCommand(SimpleCommand command) {
+    public void addCommand(BaseCommand command) {
         this.subCommands.put(command.name, command);
         command.setParent(this);
-    }
-
-    private void setParent(SimpleCommand parent) {
-        this.parent = parent;
     }
 
     /**
@@ -165,14 +130,14 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
      * @param prefix The string the user already has typed. Used for command completion.
      * @return A list of all possible subcommands given the restrictions.
      */
-    public List<SimpleCommand> getSubCommands(CommandSender sender, String prefix) {
-        List<SimpleCommand> commands = new ArrayList<>();
-        for(SimpleCommand cmd : subCommands.values()) {
+    public List<BaseCommand> getSubCommands(CommandSender sender, String prefix) {
+        List<BaseCommand> commands = new ArrayList<>();
+        for(BaseCommand cmd : subCommands.values()) {
             if(!cmd.name.startsWith(prefix)) continue;
             if(cmd.playerOnly && !(sender instanceof Player)) continue;
 
             // Check permissions. If the command has no permission it will be checked if the arguments do.
-            if(!cmd.depthPermissionSearch(sender)) continue;
+            if(!cmd.isAllowed(sender)) continue;
 
             commands.add(cmd);
         }
@@ -186,127 +151,26 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
      * @param sender The command sender
      * @return True if this node can be executed.
      */
-    boolean depthPermissionSearch(CommandSender sender) {
+    @Override
+    public boolean isAllowed(CommandSender sender) {
         // TODO: Strict node. If the node has a permission and this is enabled players NEED to have the permission of the current command. No exceptions.
         //if(getFullPermission() != null && !sender.hasPermission(getFullPermission())) return false;
 
         if(subCommands.size() == 0) {
-            String permission = getFullPermission();
-            if(permission == null) return true;
-            return sender.hasPermission(permission);
+            return checkPermission(sender);
         }
-        return subCommands.values().stream().anyMatch(cmd -> cmd.depthPermissionSearch(sender));
+        return subCommands.values().stream().anyMatch(cmd -> cmd.isAllowed(sender));
     }
 
-    protected ISimpleHelpFormatter getHelpFormatter() {
-        if(this.helpFormatter != null) return helpFormatter;
-        if(this.parent != null) return parent.getHelpFormatter();
-
-        this.helpFormatter = new SimpleHelpFormatter();
-        return this.helpFormatter;
-    }
-
-    /**
-     * Sets the formatter for this command.
-     * Please note that each root command can have it's own look and feel help.
-     * @param formatter The new formatter
-     */
-    protected void setHelpFormatter(SimpleHelpFormatter formatter) {
-        this.helpFormatter = formatter;
-    }
-
-    protected void sendHelp(CommandSender sender, List<SimpleCommand> subCommands) {
+    protected void sendHelp(CommandSender sender, List<BaseCommand> subCommands) {
         getHelpFormatter().sendHelp(sender, subCommands);
     }
 
-    /**
-     * Returns the command name.
-     * @return The command name
-     */
-    public String getName() {
-        return this.name;
-    }
 
-    public boolean hasDescription() {
-        return this.description != null;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    protected SimpleCommand getParent() {
-        return parent;
-    }
-
-    public Collection<SimpleCommand> getSubCommands() {
+    public Collection<BaseCommand> getSubCommands() {
         return this.subCommands.values();
     }
 
-    /**
-     * Gets the full command name using its parents.
-     * @return The full command.
-     */
-    public String getFullName() {
-        if(parent == null) return getName();
-
-        StringBuilder builder = new StringBuilder();
-        SimpleCommand parent = this.parent;
-        while(parent != null) {
-            builder.insert(0, parent.getName() + " ");
-            parent = parent.getParent();
-        }
-        builder.append(getName());
 
 
-        return builder.toString();
-    }
-
-    public String getPermission() {
-        return permission;
-    }
-
-    /**
-     * Used to create the full permission node for a command.
-     * Commands can have their own specific permission but in order to make nesting
-     * easier the + operator can be used to concat to the permission of the parent node.
-     * @return A command node like "commands.debug.test.xxx"
-     */
-    public String getFullPermission() {
-        if(fullPermission != null) return fullPermission;
-
-        // If it does not start with the + operator we return this root permission.
-        // For cases were an argument has no permission (null) we get the permission of it's parent.
-        if(this.permission == null) {
-            if(parent == null) return null;
-            return parent.getFullPermission();
-        }
-        if(!this.permission.startsWith("+")) return getPermission();
-
-        // Check if we have a parent. If not, thrown an exception
-        if(parent == null) throw new RuntimeException(String.format("Cannot concat the permission %s to it's parent because it has none!", this.permission));
-
-        // Recursion step:
-        String parentPermission = parent.getFullPermission();
-
-        // Check if the parent permission is null. If so we cannot attach to it.
-        // The other option would be to skip it but this can lead to confusing permission nodes.
-        if(parentPermission == null) throw new RuntimeException(String.format("Cannot concat the permission %s to it's parent because it parent (%s) has no permission!", permission, parent.getFullName()));
-
-        this.fullPermission = parentPermission + "." + this.permission.substring(1);
-        return this.fullPermission;
-    }
-
-    /**
-     * Register the plugin to the server using the plugin specified.
-     * @param plugin The plugin the command should be registered too.
-     */
-    public void registerCommand(JavaPlugin plugin) {
-        PluginCommand command = plugin.getCommand(this.name);
-        if(command == null) throw new RuntimeException(String.format("Plugin tried to register the SimpleCommand /%s but it was not specified in the plugin.yml", name));
-        if(parent != null) throw new RuntimeException(String.format("Plugin tried to register the SimpleCommand /%s but has a parent node!", getFullName()));
-
-        command.setExecutor(this);
-        command.setTabCompleter(this);
-    }
 }
