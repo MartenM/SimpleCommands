@@ -86,19 +86,41 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
          * do this him/her self.
          */
 
-        if(sc.playerOnly && !(sender instanceof Player)) {
+        if(!isAllowedSender(sender)) {
             sender.sendMessage(SimpleCommandMessages.PLAYER_ONLY.m());
             return true;
         }
 
-        // If a node contains sub-commands we don't check it's permission.
-        if(sc.subCommands.size() == 0 && sc.getFullPermission() != null && !sender.hasPermission(sc.getFullPermission())) {
+        // Do the permission check for the child.
+        if(!sc.checkPermission(sender)) {
             sender.sendMessage(SimpleCommandMessages.NO_PERMISSION.m());
             return true;
         }
 
         // Pass on the command to the next handler. Remove the first argument.
         return sc.onCommand(sender, command, s, Arrays.copyOfRange(args, 1, args.length));
+    }
+
+    /**
+     * Permission check for this node.
+     * Only executed when it's a leaf (in other worlds no subCommands).
+     * @param sender The command sender
+     * @return True if allowed
+     */
+    public boolean checkPermission(CommandSender sender) {
+        if(this.subCommands.size() != 0) return true;
+        if(this.getFullPermission() == null) return true;
+        return sender.hasPermission(this.getFullPermission());
+    }
+
+    /**
+     * Checks if the sender is allowed to execute this command.
+     * Mainly used for playerOnly checks.
+     * @param sender The command sender
+     * @return True if allowed.
+     */
+    public boolean isAllowedSender(CommandSender sender) {
+        return !this.playerOnly || sender instanceof Player;
     }
 
     @Override
