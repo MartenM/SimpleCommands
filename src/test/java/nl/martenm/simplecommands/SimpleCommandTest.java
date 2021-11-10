@@ -160,7 +160,7 @@ public class SimpleCommandTest {
     @Test
     public void testParsedInvalid() {
         testCommand.onCommand(consoleSender, cmd, "test parsed 1 a 2.00 hello", new String[] {"parsed", "1", "a", "2.00", "hello"});
-        assert consoleSender.hasReceived("The argument someDouble could not be parsed. Value a");
+        assert consoleSender.hasReceived("The argument someDouble could not be parsed. Reason: java.lang.NumberFormatException: For input string: \"a\". Value: a", true);
     }
 
     @Test

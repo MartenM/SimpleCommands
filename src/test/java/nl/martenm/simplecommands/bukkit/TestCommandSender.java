@@ -49,6 +49,11 @@ public abstract class TestCommandSender implements CommandSender {
         return messages.stream().anyMatch(m -> m.equalsIgnoreCase(message));
     }
 
+    public boolean hasReceived(String message, boolean strippedColour) {
+        if(!strippedColour) return hasReceived(message);
+        return messages.stream().map(ChatColor::stripColor).anyMatch(m -> m.equalsIgnoreCase(message));
+    }
+
     public boolean isExecuted() {
         return messages.stream().anyMatch(message -> message.equalsIgnoreCase("done"));
     }
