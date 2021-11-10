@@ -3,7 +3,6 @@ package nl.martenm.simplecommands.bukkit;
 import nl.martenm.simplecommands.SimpleCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;

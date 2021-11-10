@@ -19,11 +19,11 @@ public class SimpleHelpFormatter implements ISimpleHelpFormatter {
      * @param subCommands The commands that are available for this sender.
      */
     @Override
-    public void sendHelp(CommandSender sender, List<BaseCommand> subCommands) {
+    public void sendHelp(CommandSender sender, List<SimpleCommand> subCommands) {
         send(sender, String.format("&7===============[ %s &7]===============", header));
         send(sender, " ");
 
-        for(BaseCommand cmd : subCommands) {
+        for(SimpleCommand cmd : subCommands) {
             if(cmd.hasDescription()) {
                 send(sender, String.format("&2/&a%s &7- &e%s", cmd.getFullName(), cmd.getDescription()));
             } else {

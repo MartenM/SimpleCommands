@@ -1,10 +1,10 @@
 package nl.martenm.simplecommands.implementations;
 
-import nl.martenm.simplecommands.SimpleCommand;
+import nl.martenm.simplecommands.RootCommand;
 
-public class SimpleTestCommand extends SimpleCommand {
+public class RootTestCommand extends RootCommand {
 
-    public SimpleTestCommand() {
+    public RootTestCommand() {
         super("test",  false);
 
         addCommand(new SubCommandPlayerOnly());

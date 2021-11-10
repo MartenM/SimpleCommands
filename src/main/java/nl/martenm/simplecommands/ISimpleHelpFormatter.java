@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface ISimpleHelpFormatter {
 
-    void sendHelp(CommandSender sender, List<BaseCommand> subCommands);
+    void sendHelp(CommandSender sender, List<SimpleCommand> subCommands);
 }

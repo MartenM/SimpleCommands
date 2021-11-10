@@ -2,7 +2,7 @@ package nl.martenm.simplecommands;
 
 import nl.martenm.simplecommands.bukkit.ConsoleSender;
 import nl.martenm.simplecommands.bukkit.PlayerSender;
-import nl.martenm.simplecommands.implementations.SimpleTestCommand;
+import nl.martenm.simplecommands.implementations.RootTestCommand;
 import nl.martenm.simplecommands.implementations.SubAlways;
 import nl.martenm.simplecommands.implementations.SubAttached;
 import org.bukkit.command.Command;
@@ -10,8 +10,6 @@ import org.bukkit.command.CommandSender;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 /**
  * Simple unit test. Especially for permissions to make sure these don't break.
@@ -22,13 +20,13 @@ public class SimpleCommandTest {
     private PlayerSender playerSender;
 
     private Command cmd;
-    private SimpleTestCommand testCommand;
+    private RootTestCommand testCommand;
 
     @BeforeEach
     public void setup() {
         this.consoleSender = new ConsoleSender("Console sender");
         this.playerSender = new PlayerSender("Player sender");
-        this.testCommand = new SimpleTestCommand();
+        this.testCommand = new RootTestCommand();
         this.cmd = new Command("test") {
             @Override
             public boolean execute(CommandSender commandSender, String s, String[] strings) {
@@ -70,7 +68,7 @@ public class SimpleCommandTest {
 
     @Test
     public void testAttachedPermission() {
-        SimpleCommand root = new SimpleCommand("permission", "permission", false) {
+        RootCommand root = new RootCommand("permission", "permission", false) {
 
         };
         SimpleCommand attached = new SubAttached();
@@ -91,7 +89,7 @@ public class SimpleCommandTest {
 
     @Test
     public void testAttachedNoParentPermission() {
-        SimpleCommand root = new SubAlways();
+        RootCommand root = new SubAlways();
         SimpleCommand attached = new SubAttached();
         root.addCommand(attached);
 

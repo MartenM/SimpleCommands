@@ -1,6 +1,6 @@
 package nl.martenm.simplecommands.arguments;
 
-import nl.martenm.simplecommands.BaseCommand;
+import nl.martenm.simplecommands.SimpleCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class SimpleParsedCommand extends BaseCommand {
+public abstract class SimpleParsedCommand extends SimpleCommand {
 
     private final List<SimpleCommandArgument> arguments = new ArrayList<>();
 
