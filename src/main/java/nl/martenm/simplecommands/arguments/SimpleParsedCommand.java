@@ -77,6 +77,8 @@ public abstract class SimpleParsedCommand extends SimpleCommand {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String s, String[] args) {
         // Get the correct parser
+        if(args.length >= this.arguments.size()) return new ArrayList<>();
+
         String current = args[args.length - 1];
         SimpleCommandArgument parser = this.arguments.get(args.length - 1);
         if(parser == null) return new ArrayList<>();

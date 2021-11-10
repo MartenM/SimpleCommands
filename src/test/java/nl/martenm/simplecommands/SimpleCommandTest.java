@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 /**
  * Simple unit test. Especially for permissions to make sure these don't break.
  */
@@ -178,5 +180,11 @@ public class SimpleCommandTest {
         consoleSender.testCommandCompletion(testCommand, cmd, "test parsed 1 ", new String[]{"parsed", "1", ""});
         assert consoleSender.hasTabCompletion("someDouble");
         consoleSender.reset();
+    }
+
+    @Test
+    public void testParsedTabCompletionOutOfIndex() {
+        List<String> tabCompletions = testCommand.onTabComplete(consoleSender, cmd, "test parsed 1 1.00 2.00 hello aaa", new String[] {"parsed", "1", "1.00", "2.00", "hello", "aaaa"});
+        assert tabCompletions.isEmpty();
     }
 }
