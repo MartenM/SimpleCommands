@@ -53,7 +53,7 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
         }
 
         // Respect the PlayerOnly command.
-        if(playerOnly && !(sender instanceof Player)) {
+        if(isAllowedSender(sender)) {
             sender.sendMessage(SimpleCommandMessages.PLAYER_ONLY.m());
             return true;
         }
