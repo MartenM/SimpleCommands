@@ -86,7 +86,7 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
          * do this him/her self.
          */
 
-        if(!isAllowedSender(sender)) {
+        if(!sc.isAllowedSender(sender)) {
             sender.sendMessage(SimpleCommandMessages.PLAYER_ONLY.m());
             return true;
         }
@@ -120,7 +120,8 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
      * @return True if allowed.
      */
     public boolean isAllowedSender(CommandSender sender) {
-        return !this.playerOnly || sender instanceof Player;
+        if(this.playerOnly && !(sender instanceof Player)) return false;
+        else return true;
     }
 
     @Override
