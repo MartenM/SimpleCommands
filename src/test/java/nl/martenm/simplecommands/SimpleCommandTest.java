@@ -168,7 +168,7 @@ public class SimpleCommandTest {
     @Test
     public void testParsedMissing() {
         testCommand.onCommand(consoleSender, cmd, "test parsed 1 1.00", new String[] {"parsed", "1", "1.00"});
-        assert consoleSender.hasReceived("Missing arguments: someFloat, someString");
+        assert consoleSender.hasReceived("Missing arguments: someFloat, someString", true);
     }
 
     @Test
