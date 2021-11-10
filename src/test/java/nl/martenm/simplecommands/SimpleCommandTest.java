@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 /**
  * Simple unit test. Especially for permissions to make sure these don't break.
  */
@@ -24,7 +26,7 @@ public class SimpleCommandTest {
 
     @BeforeEach
     public void setup() {
-        this.consoleSender = new ConsoleSender("Console sender.");
+        this.consoleSender = new ConsoleSender("Console sender");
         this.playerSender = new PlayerSender("Player sender");
         this.testCommand = new SimpleTestCommand();
         this.cmd = new Command("test") {
@@ -149,11 +151,34 @@ public class SimpleCommandTest {
     }
 
     @Test
-    public void test () {
-        double test = 5.4;
+    public void testParsedValid() {
+        testCommand.onCommand(consoleSender, cmd, "test parsed 1 1.00 2.00 hello", new String[] {"parsed", "1", "1.00", "2.00", "hello"});
+        assert consoleSender.hasReceived("java.lang.Integer");
+        assert consoleSender.hasReceived("java.lang.Double");
+        assert consoleSender.hasReceived("java.lang.Float");
+        assert consoleSender.hasReceived("java.lang.String");
+    }
 
-        test = Math.round(test * 2.0) / 2.0;
-        System.out.println(test);
+    @Test
+    public void testParsedInvalid() {
+        testCommand.onCommand(consoleSender, cmd, "test parsed 1 a 2.00 hello", new String[] {"parsed", "1", "a", "2.00", "hello"});
+        assert consoleSender.hasReceived("The argument someDouble could not be parsed. Value a");
+    }
 
+    @Test
+    public void testParsedMissing() {
+        testCommand.onCommand(consoleSender, cmd, "test parsed 1 1.00", new String[] {"parsed", "1", "1.00"});
+        assert consoleSender.hasReceived("Missing arguments: someFloat, someString");
+    }
+
+    @Test
+    public void testParsedTabCompletion() {
+        consoleSender.testCommandCompletion(testCommand, cmd, "test parsed ", new String[]{"parsed", ""});
+        assert consoleSender.hasTabCompletion("someInteger");
+        consoleSender.reset();
+
+        consoleSender.testCommandCompletion(testCommand, cmd, "test parsed 1 ", new String[]{"parsed", "1", ""});
+        assert consoleSender.hasTabCompletion("someDouble");
+        consoleSender.reset();
     }
 }

@@ -1,17 +1,22 @@
 package nl.martenm.simplecommands.bukkit;
 
+import nl.martenm.simplecommands.SimpleCommand;
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class TestCommandSender {
+public abstract class TestCommandSender implements CommandSender {
 
     private String senderName;
 
     private List<String> messages = new ArrayList<>();
     private List<String> permissions = new ArrayList<>();
+    private List<String> suggestions = new ArrayList<>();
 
     public TestCommandSender(String senderName) {
         this.senderName = senderName;
@@ -51,5 +56,17 @@ public class TestCommandSender {
 
     public List<String> getMessages() {
         return messages;
+    }
+
+    public void testCommandCompletion(SimpleCommand simpleCommand, Command command, String s, String[] args) {
+        List<String> completions = simpleCommand.onTabComplete(this, command, s, args);
+        completions.stream().map(ChatColor::stripColor).forEach(suggestion -> {
+            suggestions.add(suggestion);
+            log("TAB COMPLETION", suggestion);
+        });
+    }
+
+    public boolean hasTabCompletion(String test) {
+        return this.suggestions.contains(test);
     }
 }

@@ -14,7 +14,7 @@ public class SimpleTestCommand extends SimpleCommand {
         addCommand(new SubNested("nestedAlways", new SubNested("1", new SubAlways())));
         addCommand(new SubNested("nestedPermission", new SubNested("1", new SubCommandPermissionTest())));
         addCommand(new SubNested("nestedPlayerOnly", new SubNested("1", new SubCommandPlayerOnly())));
-
+        addCommand(new SimpleArgumentTestCommand());
     }
 
 }

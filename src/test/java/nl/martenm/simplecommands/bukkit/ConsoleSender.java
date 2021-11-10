@@ -147,7 +147,7 @@ public class ConsoleSender extends TestCommandSender implements ConsoleCommandSe
 
     @Override
     public boolean isOp() {
-        return false;
+        return true;
     }
 
     @Override
