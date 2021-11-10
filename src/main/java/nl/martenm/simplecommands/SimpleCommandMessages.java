@@ -6,12 +6,12 @@ import java.util.Locale;
 
 public enum SimpleCommandMessages {
 
-    UNKNOWN_COMMAND("&cUnknown command"),
+    DEFAULT_ARGUMENT_ERROR("&cThe argument &7%name%&c could not be parsed. Reason:&r %reason%&c. Value: &r%input%"),
     UNKNOWN_ARGUMENT("&cUnknown command argument:&7 %s"),
     PLAYER_ONLY("&cThis is a player only command."),
     NO_PERMISSION("&cYou do not have permission to execute this command!");
 
-    private String key;
+    private final String key;
     private String message;
 
     SimpleCommandMessages(String message) {

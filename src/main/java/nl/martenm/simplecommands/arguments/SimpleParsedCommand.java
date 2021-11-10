@@ -62,6 +62,15 @@ public abstract class SimpleParsedCommand extends SimpleCommand {
         return onArgumentCommand(sender, command, s, args, parsedArguments);
     }
 
+    /**
+     * Called when parsing was successful.
+     * @param sender
+     * @param command
+     * @param s
+     * @param args
+     * @param parsedArgs
+     * @return
+     */
     protected abstract boolean onArgumentCommand(CommandSender sender, Command command, String s, String[] args, List<Object> parsedArgs);
 
     @Override

@@ -6,7 +6,7 @@ package nl.martenm.simplecommands.arguments;
  */
 public class ParseFailedException extends Exception {
 
-    private Exception exception;
+    private final Exception exception;
     public ParseFailedException(Exception ex) {
         this.exception = ex;
     }

@@ -7,6 +7,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The basis for a commands. This abstract class contains all basic information required to structure
+ * the commands in a tree like structure. The {@link RootCommand} can be used to create a collection of commands.
+ */
 public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
 
     protected final String name;
@@ -22,7 +26,12 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
 
     // Help formatter - Not sure if this one should be here but it's anyway.
     protected ISimpleHelpFormatter helpFormatter = null;
-    
+
+    /**
+     * Create a SimpleCommand with no permission and no description.
+     * @param name The command name
+     * @param playerOnly If the command is player only or not.
+     */
     public SimpleCommand(String name, boolean playerOnly) {
         this.name = name;
         this.playerOnly = playerOnly;
@@ -52,7 +61,6 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
 
     /**
      * Permission check for this node.
-     * Only executed when it's a leaf (in other worlds no subCommands).
      * @param sender The command sender
      * @return True if allowed
      */
@@ -81,6 +89,12 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
         return permission;
     }
 
+    /**
+     * Check if a command is allowed to be executed, keeping in mind playerOnly and the
+     * permissions. This method can be overridden by sub-classes.
+     * @param sender The command sender
+     * @return True if this command can be executed.
+     */
     public boolean isAllowed(CommandSender sender) {
         return checkPermission(sender);
     }
@@ -130,10 +144,18 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
         command.setTabCompleter(this);
     }
 
+    /**
+     * Sets the parent of this command
+     * @param parent The parent
+     */
     protected void setParent(RootCommand parent) {
         this.parent = parent;
     }
 
+    /**
+     * Gets the parent of this command.
+     * @return
+     */
     protected SimpleCommand getParent() {
         return parent;
     }
@@ -165,6 +187,11 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
         return builder.toString();
     }
 
+    /**
+     * Get the help formatter for this command.
+     * At the moment this is mostly used for nested commands that have a {@link RootCommand} as parent.
+     * @return The formatter
+     */
     protected ISimpleHelpFormatter getHelpFormatter() {
         if(this.helpFormatter != null) return helpFormatter;
         if(this.parent != null) return parent.getHelpFormatter();
@@ -182,10 +209,18 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
         this.helpFormatter = formatter;
     }
 
+    /**
+     * Checks if the command has a description set.
+     * @return True if a description is available
+     */
     public boolean hasDescription() {
         return this.description != null;
     }
 
+    /**
+     * Gets the description
+     * @return The description
+     */
     public String getDescription() {
         return description;
     }

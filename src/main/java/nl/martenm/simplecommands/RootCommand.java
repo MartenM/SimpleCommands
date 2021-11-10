@@ -5,6 +5,14 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 
+/**
+ * A Root command is not supposed to execute any custom command logic.
+ * It it's used to create a hierarchy of commands. For example:
+ *  /debug start
+ *  /debug end
+ *  /debug show
+ * In this example "debug" is a root command.
+ */
 public abstract class RootCommand extends SimpleCommand {
 
     // Map of all sub-commands.
@@ -159,15 +167,20 @@ public abstract class RootCommand extends SimpleCommand {
         return subCommands.values().stream().anyMatch(cmd -> cmd.isAllowed(sender));
     }
 
+    /**
+     * Sends the help for this command node to the command sender specified.
+     * @param sender The help receiver
+     * @param subCommands The list of subcommands
+     */
     protected void sendHelp(CommandSender sender, List<SimpleCommand> subCommands) {
         getHelpFormatter().sendHelp(sender, subCommands);
     }
 
-
+    /**
+     * Gets and returns a collection of all subcommands.
+     * @return The subcommands
+     */
     public Collection<SimpleCommand> getSubCommands() {
         return this.subCommands.values();
     }
-
-
-
 }

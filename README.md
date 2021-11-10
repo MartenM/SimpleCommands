@@ -69,7 +69,7 @@ public class SimpleLoadPlayer extends SimpleCommand {
 
 ### Step 3: Register the command to the Server
 The SimpleCommands class provides an easy way to register commands.
-Simple follow the syntax below. Please note that commands with parents CANNOT be registered.
+Simply follow the syntax below. Please note that commands with parents CANNOT be registered.
 
 ```java
 @Override

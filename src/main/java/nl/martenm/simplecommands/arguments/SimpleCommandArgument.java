@@ -1,5 +1,6 @@
 package nl.martenm.simplecommands.arguments;
 
+import nl.martenm.simplecommands.SimpleCommandMessages;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -11,10 +12,10 @@ import java.util.List;
  * This class provides a parser and tab completer.
  * @param <T> The class of object this parser will return.
  */
-public abstract class SimpleCommandArgument<T extends Object> {
+public abstract class SimpleCommandArgument<T> {
 
-    private String name;
-    private String errorMessage;
+    private final String name;
+    private final String errorMessage;
 
     /**
      * Simple constructor with the default error message.
@@ -22,7 +23,7 @@ public abstract class SimpleCommandArgument<T extends Object> {
      */
     public SimpleCommandArgument(String name) {
         this.name = name;
-        this.errorMessage = "The argument %name% could not be parsed. Value %input%";
+        this.errorMessage = SimpleCommandMessages.DEFAULT_ARGUMENT_ERROR.m();
     }
 
     /**
@@ -36,20 +37,51 @@ public abstract class SimpleCommandArgument<T extends Object> {
         this.errorMessage = errorMessage;
     }
 
+    /**
+     * Called when a string needs to be converted into it's object.
+     * @param argument The argument to be converted
+     * @return A object
+     * @throws ParseFailedException Thrown when parsing is not possible
+     */
     protected abstract T parseArgument(String argument) throws ParseFailedException;
 
+    /**
+     * Called when a tab-completion is being called for.
+     * @param input The input already there
+     * @return A list of tab completions
+     */
     public List<String> onTabCompletion(String input) {
         return Collections.singletonList(ChatColor.AQUA + this.getName() + ChatColor.RESET);
     }
 
+    /**
+     * The error to be send to the user when the parsing is unsuccessful.
+     * @param sender The command executor
+     * @param input The input string
+     * @param ex The parse exception
+     */
     public void sendError(CommandSender sender, String input, Exception ex) {
-        sender.sendMessage(getErrorMessage(input));
+        sender.sendMessage(getErrorMessage(input, ex));
     }
 
-    private String getErrorMessage(String input) {
-        return this.errorMessage.replace("%name%", this.name).replace("%input%", input);
+    /**
+     * Gets the error message. Replacing the parameters: %name%, %input%, %reason%.
+     * @param input The input argument
+     * @param ex The parse exception
+     * @return A formatted error message
+     */
+    private String getErrorMessage(String input, Exception ex) {
+        return this.errorMessage
+                .replace("%name%", this.name)
+                .replace("%input%", input)
+                .replace("%reason%", ex.getMessage());
     }
 
+    /**
+     * The name of this argument.
+     * Used to help guide the user enter the right one.
+     * @return The argument name
+     */
     public String getName() {
         return name;
     }

@@ -28,7 +28,7 @@ public class SimpleBooleanArgument extends SimpleCommandArgument<Boolean> {
 
     @Override
     public List<String> onTabCompletion(String input) {
-        List<String> potentional = Arrays.asList("true", "false");
-        return potentional.stream().filter(s -> s.startsWith(input)).collect(Collectors.toList());
+        List<String> potential = Arrays.asList("true", "false");
+        return potential.stream().filter(s -> s.startsWith(input)).collect(Collectors.toList());
     }
 }
