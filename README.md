@@ -34,9 +34,9 @@ The latest release tag can be seen in the shield above.
 </dependencies>
 ```
 
-### Step 1: Create a base class
+### Step 1: Create a RootCommand
 ```java
-public class DebugCommand extends SimpleCommand {
+public class DebugCommand extends RootCommand {
 
     public DebugCommand() {
         super("debug", "someplugin.commands.debug", false);
@@ -48,7 +48,7 @@ public class DebugCommand extends SimpleCommand {
 }
 ```
 
-### Step 2: Create the subcommands:
+### Step 2: Create the subcommands (SimpleCommand):
 ```java
 public class SimpleLoadPlayer extends SimpleCommand {
 
