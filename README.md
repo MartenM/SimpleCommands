@@ -86,3 +86,10 @@ public class TestPlugin extends JavaPlugin {
 
 ### Step 4: Enjoy the command in game
 You are done! 
+
+
+## Feature additions
+These are features planned for upcoming releases.
+
+* Hide commands from the help formatter
+* Add documentation on isAllowed() overwrites
