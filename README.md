@@ -92,4 +92,5 @@ You are done!
 These are features planned for upcoming releases.
 
 * Hide commands from the help formatter
+* Command aliases (useful for help pages)
 * Add documentation on isAllowed() overwrites
