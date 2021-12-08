@@ -1,11 +1,14 @@
 package nl.martenm.simplecommands;
 
+import nl.martenm.simplecommands.misc.NameFormat;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * The basis for a commands. This abstract class contains all basic information required to structure
@@ -17,6 +20,7 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
     protected final String description;
     protected final String permission;
     protected final boolean playerOnly;
+    protected List<String> aliases = new ArrayList<>();
 
     // Cache the value of the full permission node.
     protected String fullPermission = null;
@@ -57,6 +61,32 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
     public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings) {
         // Default no tab completion.
         return new ArrayList<>();
+    }
+
+    /**
+     * Executes a test to see if the input matches the command name or any of the aliases.
+     * Check ignores upper/lower case
+     * @param input The test input
+     * @return If the command matches
+     */
+    public boolean testNameMatch(String input) {
+        if(this.name.equalsIgnoreCase(input)) return true;
+        return this.aliases.stream().anyMatch(alias -> alias.equalsIgnoreCase(input));
+    }
+
+    /**
+     * Returns all possible tab completions for this command including aliases
+     * for this command.
+     * @param prefix The already typed string
+     * @return All possible tab completions
+     */
+    public List<String> getTabCompletions(String prefix) {
+        List<String> completions = new ArrayList<>();
+        if(this.name.startsWith(prefix)) completions.add(this.name);
+        for(String alias : this.aliases) {
+            if(alias.startsWith(prefix)) completions.add(this.name);
+        }
+        return completions;
     }
 
     /**
@@ -140,6 +170,11 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
         if(command == null) throw new RuntimeException(String.format("Plugin tried to register the SimpleCommand /%s but it was not specified in the plugin.yml", name));
         if(parent != null) throw new RuntimeException(String.format("Plugin tried to register the SimpleCommand /%s but has a parent node!", getFullName()));
 
+        // Set the alias for this command.
+        if(this.aliases != null) {
+            this.aliases.addAll(command.getAliases());
+        }
+
         command.setExecutor(this);
         command.setTabCompleter(this);
     }
@@ -150,6 +185,14 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
      */
     protected void setParent(RootCommand parent) {
         this.parent = parent;
+    }
+
+    /**
+     * Returns true if the command has a parent.
+     * @return
+     */
+    public boolean hasParent() {
+        return this.parent != null;
     }
 
     /**
@@ -173,16 +216,36 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
      * @return The full command.
      */
     public String getFullName() {
-        if(parent == null) return getName();
+        return getFullName(NameFormat.NO_ALIAS);
+    }
 
+    /**
+     * Gets the full command name using its parents.
+     * @return The full command.
+     */
+    public String getFullName(NameFormat format) {
         StringBuilder builder = new StringBuilder();
         SimpleCommand parent = this.parent;
         while(parent != null) {
-            builder.insert(0, parent.getName() + " ");
+            switch (format) {
+                case NO_ALIAS:
+                    builder.insert(0, parent.getName() + " ");
+                    break;
+                case ALL_ALIAS:
+                    builder.insert(0, parent.getAlias() + " ");
+                    break;
+                case ROOT_ALIAS:
+                    // ROOT has no parent
+                    if(!parent.hasParent()) builder.insert(0, parent.getAlias() + " ");
+                    else builder.insert(0, parent.getName() + " ");
+                    break;
+            }
+
             parent = parent.getParent();
         }
-        builder.append(getName());
 
+        if(format == NameFormat.ALL_ALIAS) builder.append(getAlias());
+        else builder.append(getName());
 
         return builder.toString();
     }
@@ -225,4 +288,40 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
         return description;
     }
 
+    /**
+     * Checks if a alias is present;
+     * @return True if this command has an alias.
+     */
+    public boolean hasAlias() {
+        return this.aliases.size() > 0;
+    }
+
+    /**
+     * Gets the alias of this command. It takes the first entry
+     * in the list of aliases.
+     *
+     * If no alias is present it will return the default name of the command.
+     * @return The command alias
+     */
+    public String getAlias() {
+        if(hasAlias()) return aliases.get(0);
+        return getName();
+    }
+
+    /**
+     * Get the list of aliases for this command.
+     * @return All aliases
+     */
+    public List<String> getAliases() {
+        return this.aliases;
+    }
+
+    /**
+     * Sets the alias of this command.
+     * @param alias The new alias
+     */
+    public void addAlias(String alias) {
+        if(this.aliases.contains(alias)) return;
+        this.aliases.add(alias);
+    }
 }

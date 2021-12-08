@@ -15,8 +15,10 @@ import java.util.*;
  */
 public abstract class RootCommand extends SimpleCommand {
 
-    // Map of all sub-commands.
-    private final Map<String, SimpleCommand> subCommands = new HashMap<>();
+    // List of all subCommands
+    private final List<SimpleCommand> subCommands = new ArrayList<>();
+    // Command map, this includes aliases
+    private final Map<String, SimpleCommand> commandMap = new HashMap<>();
 
     public RootCommand(String name, boolean playerOnly) {
         super(name, playerOnly);
@@ -34,7 +36,7 @@ public abstract class RootCommand extends SimpleCommand {
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         // If there are no subcommands the onCommand method should have been overwritten.
         // Throw an exception if this is not the case.
-        if(subCommands.size() == 0) {
+        if(commandMap.size() == 0) {
             throw new RuntimeException("No sub-commands for the command: " + getFullName());
         }
 
@@ -48,7 +50,7 @@ public abstract class RootCommand extends SimpleCommand {
         // Send a help about these. If the available subCommands.size() == 0 that means the sender cannot execute any due to missing
         // permissions or them being playerOnly commands.
         if(args.length == 0) {
-            List<SimpleCommand> subCommands = getSubCommands(sender, "");
+            List<SimpleCommand> subCommands = getSubCommands(sender);
 
             // Check if the subCommands are possible
             if(subCommands.size() == 0) {
@@ -60,7 +62,8 @@ public abstract class RootCommand extends SimpleCommand {
             return true;
         }
 
-        SimpleCommand sc = subCommands.get(args[0]);
+        SimpleCommand sc = commandMap.get(args[0]);
+
         if(sc == null) {
             sender.sendMessage(String.format(SimpleCommandMessages.UNKNOWN_ARGUMENT.m(), args[0]));
             return true;
@@ -94,7 +97,7 @@ public abstract class RootCommand extends SimpleCommand {
      */
     @Override
     public boolean checkPermission(CommandSender sender) {
-        if(this.subCommands.size() != 0) return true;
+        if(this.commandMap.size() != 0) return true;
         return super.checkPermission(sender);
     }
 
@@ -106,12 +109,12 @@ public abstract class RootCommand extends SimpleCommand {
         // Argument length is one. We can do suggestions now
         if(args.length == 1) {
             List<String> completions = new ArrayList<>();
-            getSubCommands(sender, args[0]).forEach(cmd -> completions.add(cmd.name));
+            getSubCommands(sender).forEach(cmd -> completions.addAll(cmd.getTabCompletions(args[0])));
 
             return completions;
         }
 
-        SimpleCommand next = subCommands.get(args[0]);
+        SimpleCommand next = commandMap.get(args[0]);
         if(next == null) return null;
 
         return next.onTabComplete(sender, command, s, Arrays.copyOfRange(args, 1, args.length));
@@ -122,7 +125,17 @@ public abstract class RootCommand extends SimpleCommand {
      * @param command The command
      */
     public void addCommand(SimpleCommand command) {
-        this.subCommands.put(command.name, command);
+        if(this.subCommands.contains(command)) {
+            throw new RuntimeException(String.format("Attempted to add the command %s but it was already added! (Root: %s)", command.getName(), this.name));
+        }
+        this.subCommands.add(command);
+
+        // Add the command to the map
+        this.commandMap.put(command.name, command);
+
+        // Add aliases to the same hashmap
+        command.getAliases().forEach(alias -> this.commandMap.put(alias, command));
+
         command.setParent(this);
     }
 
@@ -132,13 +145,11 @@ public abstract class RootCommand extends SimpleCommand {
      *  - The string the sender already typed
      *  - If there sub-commands in the sub-command the player has permission for.
      * @param sender The sender
-     * @param prefix The string the user already has typed. Used for command completion.
      * @return A list of all possible subcommands given the restrictions.
      */
-    public List<SimpleCommand> getSubCommands(CommandSender sender, String prefix) {
+    public List<SimpleCommand> getSubCommands(CommandSender sender) {
         List<SimpleCommand> commands = new ArrayList<>();
-        for(SimpleCommand cmd : subCommands.values()) {
-            if(!cmd.name.startsWith(prefix)) continue;
+        for(SimpleCommand cmd : subCommands) {
             if(cmd.playerOnly && !(sender instanceof Player)) continue;
 
             // Check permissions. If the command has no permission it will be checked if the arguments do.
@@ -164,7 +175,7 @@ public abstract class RootCommand extends SimpleCommand {
         if(subCommands.size() == 0) {
             return checkPermission(sender);
         }
-        return subCommands.values().stream().anyMatch(cmd -> cmd.isAllowed(sender));
+        return subCommands.stream().anyMatch(cmd -> cmd.isAllowed(sender));
     }
 
     /**
@@ -181,6 +192,6 @@ public abstract class RootCommand extends SimpleCommand {
      * @return The subcommands
      */
     public Collection<SimpleCommand> getSubCommands() {
-        return this.subCommands.values();
+        return this.subCommands;
     }
 }
