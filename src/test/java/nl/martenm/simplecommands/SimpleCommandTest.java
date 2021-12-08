@@ -2,9 +2,7 @@ package nl.martenm.simplecommands;
 
 import nl.martenm.simplecommands.bukkit.ConsoleSender;
 import nl.martenm.simplecommands.bukkit.PlayerSender;
-import nl.martenm.simplecommands.implementations.RootTestCommand;
-import nl.martenm.simplecommands.implementations.SubAlways;
-import nl.martenm.simplecommands.implementations.SubAttached;
+import nl.martenm.simplecommands.implementations.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.junit.jupiter.api.Assertions;
@@ -63,9 +61,30 @@ public class SimpleCommandTest {
     }
 
     @Test
+    public void testHelpAliases() {
+        RootCommand testRoot = new SimpleRoot("test", false);
+        SubAliases aliases = new SubAliases(false);
+        aliases.addAlias("THIS");
+
+        testRoot.addCommand(aliases);
+
+        testRoot.onCommand(consoleSender, null, "test", new String[] {});
+        assert consoleSender.hasReceived("/test aliases", true);
+    }
+
+    @Test
     public void testNestedHelp() {
         testCommand.onCommand(consoleSender, cmd, "test nestedAlways", new String[] {"nestedAlways"});
         assert consoleSender.getMessages().size() >= 3;
+        consoleSender.reset();
+
+        testCommand.onCommand(consoleSender, cmd, "test nestedAlias", new String[] {"nestedAlias"});
+        assert consoleSender.getMessages().size() >= 2;
+        consoleSender.reset();
+
+        testCommand.onCommand(consoleSender, cmd, "test na", new String[] {"na"});
+        assert consoleSender.getMessages().size() >= 2;
+        consoleSender.reset();
     }
 
     @Test
@@ -186,5 +205,34 @@ public class SimpleCommandTest {
     public void testParsedTabCompletionOutOfIndex() {
         List<String> tabCompletions = testCommand.onTabComplete(consoleSender, cmd, "test parsed 1 1.00 2.00 hello aaa", new String[] {"parsed", "1", "1.00", "2.00", "hello", "aaaa"});
         assert tabCompletions.isEmpty();
+    }
+
+    @Test
+    public void testAliasCommand() {
+        SimpleCommand command = new SubAliases(false);
+        assert !command.hasAlias();
+
+        command.addAlias("aaa");
+        assert command.hasAlias();
+        assert command.getAlias().equalsIgnoreCase("aaa");
+
+        command.addAlias("bbb");
+        assert command.hasAlias();
+        assert command.getAliases().size() == 2;
+    }
+
+    @Test
+    public void testAliasExecution() {
+        testCommand.onCommand(consoleSender, null, "/t aliases", new String[] {"aliases"});
+        assert consoleSender.hasReceived("DONE");
+        consoleSender.reset();
+
+        testCommand.onCommand(consoleSender, null, "/t aa", new String[] {"aa"});
+        assert consoleSender.hasReceived("DONE");
+        consoleSender.reset();
+
+        testCommand.onCommand(consoleSender, null, "/t qq", new String[] {"qq"});
+        assert !consoleSender.hasReceived("DONE");
+        consoleSender.reset();
     }
 }
