@@ -24,6 +24,10 @@ public class SimpleHelpFormatter implements ISimpleHelpFormatter {
         send(sender, String.format("&7===============[ %s &7]===============", header));
         send(sender, " ");
 
+        if(subCommands.size() == 0) {
+            send(sender, SimpleCommandMessages.NO_VISIBLE_COMMANDS.m());
+        }
+
         for(SimpleCommand cmd : subCommands) {
             if(cmd.hasDescription()) {
                 send(sender, String.format("&2/&a%s &7- &e%s", cmd.getFullName(NameFormat.ROOT_ALIAS), cmd.getDescription()));

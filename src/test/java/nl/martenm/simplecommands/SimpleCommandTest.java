@@ -235,4 +235,15 @@ public class SimpleCommandTest {
         assert !consoleSender.hasReceived("DONE");
         consoleSender.reset();
     }
+
+    @Test
+    public void testHiddenCommand() {
+        SimpleRoot root = new SimpleRoot("test", false);
+        SimpleCommand sub = new SubAlways();
+        root.addCommand(sub);
+        sub.setHidden(true);
+
+        root.onCommand(consoleSender, null, "test", new String[] {});
+        assert consoleSender.hasReceived("Commands are present but hidden by the developer.", true);
+    }
 }

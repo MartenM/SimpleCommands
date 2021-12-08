@@ -58,6 +58,8 @@ public abstract class RootCommand extends SimpleCommand {
                 return true;
             }
 
+            // Remove hidden commands and resend the help.
+            subCommands.removeIf(SimpleCommand::isHidden);
             sendHelp(sender, subCommands);
             return true;
         }
@@ -109,7 +111,10 @@ public abstract class RootCommand extends SimpleCommand {
         // Argument length is one. We can do suggestions now
         if(args.length == 1) {
             List<String> completions = new ArrayList<>();
-            getSubCommands(sender).forEach(cmd -> completions.addAll(cmd.getTabCompletions(args[0])));
+            getSubCommands(sender).forEach(cmd -> {
+                if(cmd.isHidden()) return;
+                completions.addAll(cmd.getTabCompletions(args[0]));
+            });
 
             return completions;
         }

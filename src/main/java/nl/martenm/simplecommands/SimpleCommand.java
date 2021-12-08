@@ -22,6 +22,8 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
     protected final boolean playerOnly;
     protected List<String> aliases = new ArrayList<>();
 
+    private boolean hidden = false;
+
     // Cache the value of the full permission node.
     protected String fullPermission = null;
 
@@ -323,5 +325,21 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
     public void addAlias(String alias) {
         if(this.aliases.contains(alias)) return;
         this.aliases.add(alias);
+    }
+
+    /**
+     * Sets if a plugin should be hidden from recommendations.
+     * @param hidden
+     */
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
+    }
+
+    /**
+     * True if a plugin is hidden
+     * @return True if hidden
+     */
+    public boolean isHidden() {
+        return hidden;
     }
 }
