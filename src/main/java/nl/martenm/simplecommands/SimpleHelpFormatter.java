@@ -1,5 +1,6 @@
 package nl.martenm.simplecommands;
 
+import nl.martenm.simplecommands.misc.NameFormat;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -25,9 +26,9 @@ public class SimpleHelpFormatter implements ISimpleHelpFormatter {
 
         for(SimpleCommand cmd : subCommands) {
             if(cmd.hasDescription()) {
-                send(sender, String.format("&2/&a%s &7- &e%s", cmd.getFullName(), cmd.getDescription()));
+                send(sender, String.format("&2/&a%s &7- &e%s", cmd.getFullName(NameFormat.ROOT_ALIAS), cmd.getDescription()));
             } else {
-                send(sender, String.format("&2/&a%s", cmd.getFullName()));
+                send(sender, String.format("&2/&a%s", cmd.getFullName(NameFormat.ROOT_ALIAS)));
             }
 
         }
