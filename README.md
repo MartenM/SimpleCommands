@@ -87,10 +87,12 @@ public class TestPlugin extends JavaPlugin {
 ### Step 4: Enjoy the command in game
 You are done! 
 
+## Checkout the wiki for more options.
+The wiki offers a guide for almost everything this libary covers.
+Check it out here: https://github.com/MartenM/SimpleCommands/wiki
 
 ## Feature additions
 These are features planned for upcoming releases.
 
 * Hide commands from the help formatter
-* Command aliases (useful for help pages)
 * Add documentation on isAllowed() overwrites
