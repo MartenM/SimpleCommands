@@ -336,10 +336,21 @@ public abstract class SimpleCommand implements CommandExecutor, TabCompleter {
     }
 
     /**
-     * True if a plugin is hidden
+     * True if a command is hidden. This impacts if a command is shown in tab completions.
      * @return True if hidden
      */
     public boolean isHidden() {
         return hidden;
+    }
+
+    /**
+     * Use to determine if a command should be displayed in tab completions and the help.
+     * The sender is required so that permission checks can be executed if required. Normally this method only checks for the isHidden() property but
+     * it allows users to overwrite this method and implement their own logic.
+     * @param sender The command sender.
+     * @return If this command is displayed in the help.
+     */
+    public boolean isHidden(CommandSender sender) {
+        return isHidden();
     }
 }

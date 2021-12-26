@@ -58,8 +58,8 @@ public abstract class RootCommand extends SimpleCommand {
                 return true;
             }
 
-            // Remove hidden commands and resend the help.
-            subCommands.removeIf(SimpleCommand::isHidden);
+            // Remove hidden commands and send the help.
+            subCommands.removeIf(cmd -> cmd.isHidden(sender));
             sendHelp(sender, subCommands);
             return true;
         }
@@ -112,7 +112,7 @@ public abstract class RootCommand extends SimpleCommand {
         if(args.length == 1) {
             List<String> completions = new ArrayList<>();
             getSubCommands(sender).forEach(cmd -> {
-                if(cmd.isHidden()) return;
+                if(cmd.isHidden(sender)) return;
                 completions.addAll(cmd.getTabCompletions(args[0]));
             });
 
@@ -145,9 +145,8 @@ public abstract class RootCommand extends SimpleCommand {
     }
 
     /**
-     * Gets a list of all possible subcommands while respecting:
+     * Gets a list of all possible subcommands that are executable while respecting:
      *  - The senders permission
-     *  - The string the sender already typed
      *  - If there sub-commands in the sub-command the player has permission for.
      * @param sender The sender
      * @return A list of all possible subcommands given the restrictions.
